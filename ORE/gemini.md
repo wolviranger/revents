@@ -1,10 +1,10 @@
-Gemini discussion
-Me:
+# Gemini discussion
+## Me:
 Good afternoon
 I am set to work on a task that involves the monitoring of application, security, and Infrastructure/platform logs. These are on a virtual machine and if that VM is reset for any reason, we loose the logs, what is a good resource (location) to collect those logs so that #1: we don't have to SSH into the VM to grab them when doing our analysis and #2: A place where we won't loose them.
 I had suggested using something like Nexus3 but we are looking at overhead costs as well. Any thoughts?
 
-Gemini:
+## Gemini:
 **BLUF:** Sonatype Nexus 3 is an artifact repository manager designed for package binaries (JAR, RPM, Docker, etc.), not a log aggregation platform. Using it for streaming log ingestion and real-time query analysis will introduce significant performance bottlenecks, complex custom ingestion scripts, and poor search capabilities. Instead, deploy lightweight log shippers (e.g., Fluent Bit or Vector) on the VM that stream logs off-host to a dedicated log analytics backend or centralized object storage.
 
 ---
@@ -39,10 +39,10 @@ Gemini:
 | **Permissions & Security** | Ingestion endpoints exposed without authentication can accept spoofed logs. | Enforce mTLS or token-based authentication between VM log shippers and the ingestion endpoint. |
 
 
-ME:
+## ME:
 Ok, so first what is SIEM stand for?
 
-Gemini:
+## Gemini:
 **BLUF:** **SIEM** stands for **Security Information and Event Management**. 
 
 It is a dedicated security solution that aggregates, analyzes, and correlates log data across an organization's infrastructure to detect threats, manage incidents, and ensure compliance.
@@ -70,7 +70,7 @@ It is a dedicated security solution that aggregates, analyzes, and correlates lo
 | **Wazuh** | Open Source | Combines endpoint security (EDR/XDR) with SIEM capabilities, very low direct software cost. |
 
 
-Me:
+## Me:
 So lets say that I am going to go with Fluent Bit + Loki + Grafana, I have a few questions (short-ish answers please):
 How large of an operation can that work for?
 Would that work for all logs?
@@ -78,7 +78,7 @@ How difficult is it to get setup?
 How difficult is it to maintain?
 Is it relatively easy to learn?
 
-Gemini:
+## Gemini:
 ### 📌 Evaluation: Fluent Bit + Loki + Grafana
 
 ---
@@ -98,13 +98,13 @@ Gemini:
 * **Watch Out For:** Avoid adding high-cardinality labels (like unique user IDs or IP addresses) as Loki metadata labels—put those inside the log payload and parse them at query time instead.
 
 
-Me:
+## Me:
 So can you give me a description/summary of the three tools?
 Fluent Bit:
 Loki:
 Grafana:
 
-Gemini:
+## Gemini:
 ### 🛠️ The Log Stack Components
 
 ---
@@ -130,11 +130,11 @@ Grafana is an open-source **visualization and analytics software** platform.
 
 ---
 
-Me:
+## Me:
 So, the team is interested in the possibility of using Azure Native tools for this log tracking, what would those tools be?
 
 
-Gemini:
+## Gemini:
 **BLUF:** If you want to use Azure-native tools for this logging stack, you will replace Fluent Bit, Loki, and Grafana with the **Azure Monitor Agent (AMA)**, **Azure Log Analytics Workspace**, and **Azure Monitor Workbooks** (or Azure Managed Grafana).
 
 These native tools integrate seamlessly into the Azure ecosystem, eliminate the need to maintain third-party database servers, and ensure your logs are persistently saved off-host even if your VM resets.
